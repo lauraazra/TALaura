@@ -1,0 +1,23 @@
+#Docker Build
+docker compose build
+
+#Running Services Docker
+docker compose up -d
+
+#Access skripsi-app
+url: localhost:2022
+
+#Mysql Port
+url: db-skripsi-app:20222
+
+#Phpmyadmin info
+url: localhost:7000
+username: root
+password: 12345687
+
+#Run artisan command (execute inside container)
+docker exec -it skripsi-app /bin/bash
+php artisan --version
+
+#Link storage folder to public folder (execute inside container)
+php artisan storage:link

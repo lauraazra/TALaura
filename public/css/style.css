@@ -1,0 +1,133 @@
+body {
+    height: 100vh;
+    background-color: #F4FFF6;
+}
+
+.bg-custom {
+    background-color: #0affa0 !important;
+}
+
+.navbar-nav .nav-link.active{
+    font-weight: bold;
+}
+
+.navbar-brand img {
+    max-width: 100%;
+    max-height: 35px;
+    height: auto;
+}
+
+.custom-toggler.navbar-toggler {
+    border-color: black;
+}
+
+.custom-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 128, 0, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.wrapper {
+    height: 30px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFF;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.wrapper span {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 5px;
+}
+
+.wrapper span.num {
+    font-size: 15px;
+    border-right: 2px solid rgba(0, 0, 0, 0.2);
+    border-left: 2px solid rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+}
+
+#product_list {
+    position: absolute;
+    background: #FFF;
+    width: 95%;
+    z-index: 999;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sticky {
+    position: sticky;
+    top: 35;
+    z-index: 1;
+    background-color: #F4FFF6;
+    padding-top: 1vh;
+    /* Menambahkan background color */
+}
+
+#transactions-detail {
+    padding-top: 3vh;
+    padding-bottom: 13vh;
+}
+
+#overlay {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Black background with transparency */
+    z-index: 3;
+    /* Ensure it's on top of other elements */
+}
+
+#spinner {
+    visibility: hidden;
+    width: 80px;
+    height: 80px;
+
+    border: 5px solid #f3f3f3;
+    border-top: 6px solid #28a745;
+    border-radius: 100%;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    animation: spin 1s infinite linear;
+    z-index: 4;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#modal-name {
+    visibility: hidden;
+    position: fixed;
+    width: 80%;
+    z-index: 5;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#spinner.show,
+#overlay.show,
+#modal-name.show {
+    visibility: visible;
+}
