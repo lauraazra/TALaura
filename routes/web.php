@@ -33,6 +33,7 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('/dashboard/product', ProductController::class);
     Route::resource('/dashboard/record', RecordController::class);
     Route::get('/dashboard/product/show', [ProductController::class, 'show'])->name('product.show');
+    Route::patch('/product/{product}/restore', [ProductController::class, 'restore'])->name('product.restore');
     Route::resource('/dashboard/users', UserController::class);
     Route::get('/login', function () {
         return redirect()->route('dashboard');
@@ -59,4 +60,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return redirect('/dashboard');
     });
     Route::put('/dashboard/users/{user}/password', [UserController::class, 'updatePassword'])->name('users.updatePassword');
+    Route::patch('/dashboard/users/{user}/restore', [UserController::class, 'restore'])->name('users.restore');
 });

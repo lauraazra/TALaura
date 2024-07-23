@@ -1,3 +1,5 @@
+<!-- resources/views/authentication/login.blade.php -->
+
 @extends('.authentication.layouts.main')
 
 @section('container')

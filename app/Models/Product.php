@@ -28,4 +28,14 @@ class Product extends Model
             return $query->where('name', 'like', '%' . request('search') . '%');
         }
     }
+    
+    public function scopeAvailable($query)
+    {
+        return $query->where('is_deleted', 0);
+    }
+
+    public function scopeDeleted($query)
+    {
+        return $query->where('is_deleted', 1);
+    }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -23,6 +22,14 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            
+            // Periksa apakah akun telah dihapus
+            if ($user->isDeleted()) {
+                Auth::logout();
+                return back()->with('loginError', 'Akun ini telah dihapus.');
+            }
+
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }

@@ -140,9 +140,6 @@
                 @csrf
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Tambahkan Produk..." name="search" id="name">
-                    <!-- <input type="hidden" name="transaction_id" id="transaction_id" value="transaction_id"> -->
-                    <!-- <input type="hidden" name="product_id" id="product_id"> -->
-                    <!-- <button class="btn btn-success" type="submit">Tambahkan</button> -->
                 </div>
                 <div id="product_list" style="display: none;"></div>
             </form>
@@ -218,7 +215,6 @@
             }
         });
 
-        // Setup CSRF token for every AJAX request
         // Fungsi untuk menampilkan hasil pencarian
         function showSearchResults(data) {
             $("#product_list").html(data).show();
@@ -321,8 +317,6 @@
     });
 
     function pilihProduk(id) {
-        // $('#product_id').val(id);
-
         if (cart.get(`product_${id}`)) {
             return alert('Produk sudah ada di keranjang');
         }

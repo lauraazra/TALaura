@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\Product;
-use App\Http\Requests\UpdateTransactionRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -21,7 +20,11 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Product::where('name', 'like', $request->search . '%')->get();
+            // Ubah kueri untuk hanya mengambil produk yang belum dihapus
+            $data = Product::where('name', 'like', $request->search . '%')
+                ->where('is_deleted', false)
+                ->get();
+
             $output = '';
             if (count($data) > 0) {
                 $output = '<ul class="list-group" style="display: block; position: relative; z-index: 1">';
@@ -94,7 +97,7 @@ class TransactionController extends Controller
         $transaction->load('user', 'details.product');
 
         return view('dashboard.transaction.edit', [
-            'title' => 'Transaction Detail',
+            'title' => 'Edit Transaksi',
             'transaction' => $transaction,
             'print_method' => 'v2'
         ]);

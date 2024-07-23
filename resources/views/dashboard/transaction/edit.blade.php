@@ -136,6 +136,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Tambahkan Produk..." name="search" id="name">
                 </div>
+                {{-- Hasil Pencarian --}}
                 <div id="product_list" style="display: none;"></div>
             </form>
         </div>
@@ -167,11 +168,16 @@
                 <div class="quantity-price d-md-flex justify-content-between align-items-center">
                     <div class="quantity d-flex justify-content-between mb-2">
                         <p class="card-text mr-2">Quantity : </p>
-                        <div class="wrapper">
-                            <span class="product_{{ $details->product_id }}_minus" onclick="minusQty({{ $details->product_id }})">-</span>
-                            <span class="product_{{ $details->product_id }}_num" onclick="numQty({{ $details->product_id }})">{{ $details->quantity }}</span>
-                            <span class=" product_{{ $details->product_id }}_plus" onclick="plusQty({{ $details->product_id }})">+</span>
-                        </div>
+                        
+                        @if (! $details->product->is_deleted==1)
+                            <div class="wrapper">
+                                <span class="product_{{ $details->product_id }}_minus" onclick="minusQty({{ $details->product_id }})" {{ $details->is_deleted ? 'disabled' : '' }}>-</span>
+                                <span class="product_{{ $details->product_id }}_num" onclick="numQty({{ $details->product_id }})" {{ $details->is_deleted ? 'disabled' : '' }}>{{ $details->quantity }}</span>
+                                <span class=" product_{{ $details->product_id }}_plus" onclick="plusQty({{ $details->product_id }})" {{ $details->is_deleted ? 'disabled' : '' }}>+</span>
+                            </div>
+                        @else
+                            <p>Product is deleted or unavailable</p>
+                        @endif
                     </div>
                     <div class="price d-flex justify-content-between">
                         <p class="card-text mr-2 mt-1 mb-0"><span class="product_{{ $details->product_id }}_qty">{{ $details->quantity }}</span> x </p>
@@ -231,9 +237,6 @@
 
 <div id="overlay"></div>
 <div id="spinner"></div>
-
-<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://printjs-4de6.kxcdn.com/print.min.css">
 
 <script>
     var cart = new Map();
@@ -516,6 +519,9 @@
     }
 
     function countProduct(type = 'direct', product, qty) {
+        if (product.product.deleted_at) {
+            return alert('Produk ini telah dihapus dan tidak dapat diedit lagi.');
+        }
         let diffQty = product.new_qty - qty;
         let newQty = type === 'plus' ? qty + 1 : type === 'minus' ? qty - 1 : qty;
         let newStok = type === 'plus' ? product.new_stok - 1 : type === 'minus' ? product.new_stok + 1 : product.new_stok + diffQty;
@@ -570,7 +576,7 @@
             totalPrice += value.subtotal;
         }
         return totalPrice;
-    }
+    } 
 
     function formatRupiah(amount) {
         return `Rp ${amount}`;

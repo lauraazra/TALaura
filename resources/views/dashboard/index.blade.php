@@ -45,7 +45,7 @@
     <div class="card w-100 mb-3 bg-primary text-white">
         <div class="card-body">
             <h5 class="card-title">Total Produk Terdaftar</h5>
-            <h1 class="card-text">{{ \App\Models\Product::count() }}</h1>
+            <h1 class="card-text">{{ \App\Models\Product::where('is_deleted', 0)->count() }}</h1>
         </div>
         <div class="logo-dashboard">
             <img src="/img/product.png" alt="Kelola Produk" class="position-absolute end-0 top-50 translate-middle-y mr-5">
@@ -65,7 +65,7 @@
     <div class="card w-100 mb-3 bg-danger text-white">
         <div class="card-body">
             <h5 class="card-title">Total Akun Terdaftar</h5>
-            <h1 class="card-text">{{ \App\Models\User::count() }}</h1>
+            <h1 class="card-text">{{ \App\Models\User::where('is_deleted', 0)->count() }}</h1>
         </div>
         <div class="logo-dashboard">
             <img src="/img/user.png" alt="Kelola Akun" class="position-absolute end-0 top-50 translate-middle-y mr-5">

@@ -12,14 +12,33 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (auth()->user()->role == 'pegawai') {
             abort(403, 'Anda tidak diperbolehkan mengakses halaman ini');
         }
+
+        // Mengatur default filter untuk menampilkan hanya akun yang tidak terhapus
+        $query = User::where('is_deleted', false);
+
+        // Filter berdasarkan pencarian
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter berdasarkan status akun
+        if ($request->has('filter')) {
+            if ($request->filter == 'inactive') {
+                $query = User::where('is_deleted', true);
+            }
+        }
+
+        // Paginasi dan ambil data user terbaru
+        $users = $query->latest()->paginate(9)->withQueryString();
+
         return view('dashboard.users.index', [
             'title' => 'User',
-            'users' => User::filter()->latest()->paginate(9)->withQueryString(),
+            'users' => $users,
         ]);
     }
 
@@ -144,7 +163,14 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        User::destroy($user->id);
+        $user->update(['is_deleted' => 1]);
+
         return redirect('/dashboard/users')->with('success', 'Akun Telah Dihapus!');
+    }
+
+    public function restore(User $user)
+    {
+        $user->update(['is_deleted' => 0]);
+        return redirect('/dashboard/users')->with('success', 'Akun berhasil diaktifkan kembali!');
     }
 }

@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -39,11 +37,24 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * Scope a query to filter active or inactive users.
+     */
     public function scopeFilter($query)
     {
         if (request('search')) {
-            return $query->where('name', 'like', '%' . request('search') . '%');
+            $query->where('name', 'like', '%' . request('search') . '%');
         }
+
+        // Filter berdasarkan status is_deleted
+        $filter = request('filter');
+        if ($filter === 'active') {
+            $query->where('is_deleted', 0);
+        } elseif ($filter === 'inactive') {
+            $query->where('is_deleted', 1);
+        }
+
+        return $query;
     }
 
     /**
@@ -52,5 +63,13 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Check if the user is deleted.
+     */
+    public function isDeleted()
+    {
+        return $this->is_deleted;
     }
 }

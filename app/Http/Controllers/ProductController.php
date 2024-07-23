@@ -11,11 +11,19 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = Product::query();
+
+        if ($request->has('filter') && $request->filter == 'deleted') {
+            $query->deleted();
+        } else {
+            $query->available();
+        }
+
         return view('dashboard.product.index', [
             'title' => 'Product',
-            'products' => Product::latest()->filter()->paginate(9)->withQueryString(),
+            'products' => $query->latest()->filter()->paginate(30)->withQueryString(),
         ]);
     }
 
@@ -166,8 +174,16 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        Product::destroy($product->id);
-        Wholesale::where('product_id', $product->id)->delete();
-        return redirect('/dashboard/product')->with('success', 'Product has been Deleted!');
+        $product->update(['is_deleted' => 1]);
+        return redirect('/dashboard/product')->with('success', 'Produk Berhasil Terhapus!');
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     */
+    public function restore(Product $product)
+    {
+        $product->update(['is_deleted' => 0]);
+        return redirect('/dashboard/product')->with('success', 'Produk Berhail Diaktifkan!');
     }
 }
